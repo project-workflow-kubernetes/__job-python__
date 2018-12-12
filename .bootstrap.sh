@@ -105,6 +105,7 @@ function remove-secrets () {
 function up () {
 
     (check-inputs)
+    (remove-secrets)
     (rename-inside)
     (rename-folders)
     (generate-secrets)

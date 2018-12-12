@@ -18,7 +18,7 @@ help:
 
 build:
 	@docker build --no-cache -t ${REMOTE_REPO}/${DOCKER_NAME}:${DOCKER_LABEL} .
-	@docker run ${REMOTE_REPO}/${DOCKER_NAME}:${DOCKER_LABEL} /bin/bash -c "cd ${JOB_NAME}; py.test --verbose --color=yes"
+	@docker run ${REMOTE_REPO}/${DOCKER_NAME}:${DOCKER_LABEL} /bin/bash -c "cd ${PROJECT_NAME}; py.test --verbose --color=yes"
 
 
 push:
