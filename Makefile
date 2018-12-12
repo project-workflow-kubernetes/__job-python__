@@ -1,4 +1,4 @@
-REMOTE_REPO=__remote-repo__
+REMOTE_REPO=liabifano
 DOCKER_NAME=__job-python__
 DOCKER_LABEL=latest
 GIT_MASTER_HEAD_SHA:=$(shell git rev-parse --short=7 --verify HEAD)
