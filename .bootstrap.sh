@@ -2,12 +2,15 @@
 
 set -eo pipefail
 
-DEFAULT='job-python-skeleton'
+DEFAULT_JOB='job-python-skeleton'
+DEFAULT_REPO='liabifano'
 
 
-while getopts ":j:" opt; do
+while getopts ":j:u:p:" opt; do
   case $opt in
-    j) JOB_NAME="$OPTARG";;
+      j) JOB_NAME="$OPTARG";;
+      u) DOCKER_USERNAME="$OPTARG";;
+      p) DOCKER_PASSWORD="$OPTARG";;
     \?) echo "Invalid option -$OPTARG" >&2
     ;;
   esac
@@ -29,9 +32,12 @@ function rename-inside () {
 
     for f in $FILES
     do
-        sed -i.bak "s/${DEFAULT}/${JOB_NAME}/" $f
+        sed -i.bak "s/${DEFAULT_JOB}/${JOB_NAME}/" $f
         rm -- "${f}.bak"
     done;
+
+    sed -i.bak "s/${DEFAULT_REPO}/${DOCKER_USERNAME}/" Makefile
+    rm -- "${f}.bak"
 
 }
 
@@ -41,30 +47,33 @@ function undo-rename-inside() {
 
     for f in $FILES
     do
-        sed -i.bak "s/${JOB_NAME}/${DEFAULT}/" $f
+        sed -i.bak "s/${JOB_NAME}/${DEFAULT_JOB}/" $f
         rm -- "${f}.bak"
     done;
+
+    sed -i.bak "s/${DOCKER_USERNAME}/${DEFAULT_REPO}/" $f
+    rm -- "${f}.bak"
 }
 
 
 function rename-folders () {
-    FOLDERS="src/__job-python__/"
+    FOLDERS="src/${DEFAULT_JOB}/"
 
     for f in $FOLDERS
     do
-        NEWFOLDER=${f//${DEFAULT}/${JOB_NAME}}
+        NEWFOLDER=${f//${DEFAULT_JOB}/${JOB_NAME}}
         mv $f ${NEWFOLDER}
     done;
 
 }
 
 function undo-rename-folders() {
-    FOLDERS="src/__job-python__/"
+    FOLDERS="src/${DEFAULT_JOB}/"
 
     for f in $FOLDERS
     do
-        OLDFOLDER=${f//${DEFAULT}/${JOB_NAME}}
-        NEWFOLDER=${f//${JOB_NAME}/"__job-python__"}
+        OLDFOLDER=${f//${DEFAULT_JOB}/${JOB_NAME}}
+        NEWFOLDER=${f//${JOB_NAME}/"${DEFAULT_JOB}"}
         mv ${OLDFOLDER} ${NEWFOLDER}
     done;
 }
@@ -73,23 +82,7 @@ function undo-rename-folders() {
 function generate-secrets () {
 
     travis login --pro --auto
-
-    if [ -z "$DOCKER_USERNAME" ]
-    then
-        echo "Please, enter your dockerhub login"
-        echo
-        read DOCKER_USERNAME
-    fi
-
     travis encrypt --com DOCKER_USERNAME=$DOCKER_USERNAME --add
-
-    if [ -z "$DOCKER_PASSWORD" ]
-    then
-        echo "Please, enter you dockerhub password - no one want to steal it"
-        echo
-        read DOCKER_PASSWORD
-    fi
-
     travis encrypt --com DOCKER_PASSWORD=$DOCKER_PASSWORD --add
 
 }
