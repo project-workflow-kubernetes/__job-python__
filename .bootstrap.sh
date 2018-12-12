@@ -2,6 +2,8 @@
 
 set -eo pipefail
 
+DEFAULT='job-python-skeleton'
+
 
 while getopts ":j:" opt; do
   case $opt in
@@ -27,7 +29,7 @@ function rename-inside () {
 
     for f in $FILES
     do
-        sed -i.bak "s/__job-python__/${JOB_NAME}/" $f
+        sed -i.bak "s/${DEFAULT}/${JOB_NAME}/" $f
         rm -- "${f}.bak"
     done;
 
@@ -39,7 +41,7 @@ function undo-rename-inside() {
 
     for f in $FILES
     do
-        sed -i.bak "s/${JOB_NAME}/__job-python__/" $f
+        sed -i.bak "s/${JOB_NAME}/${DEFAULT}/" $f
         rm -- "${f}.bak"
     done;
 }
@@ -50,7 +52,7 @@ function rename-folders () {
 
     for f in $FOLDERS
     do
-        NEWFOLDER=${f//"__job-python__"/${JOB_NAME}}
+        NEWFOLDER=${f//${DEFAULT}/${JOB_NAME}}
         mv $f ${NEWFOLDER}
     done;
 
@@ -61,7 +63,7 @@ function undo-rename-folders() {
 
     for f in $FOLDERS
     do
-        OLDFOLDER=${f//"__job-python__"/${JOB_NAME}}
+        OLDFOLDER=${f//${DEFAULT}/${JOB_NAME}}
         NEWFOLDER=${f//${JOB_NAME}/"__job-python__"}
         mv ${OLDFOLDER} ${NEWFOLDER}
     done;

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
 
-setup(name='__job-python__',
+setup(name='job-python-skeleton',
       url='',
       author='',
       package_dir={'': 'src'},

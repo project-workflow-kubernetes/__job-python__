@@ -1,9 +1,9 @@
 FROM liabifano/executor:bd0ce94
 
-COPY setup.py /__job-python__/
-COPY requirements.txt /__job-python__/
-COPY src/ /__job-python__/src/
+COPY setup.py /job-python-skeleton/
+COPY requirements.txt /job-python-skeleton/
+COPY src/ /job-python-skeleton/src/
 
 RUN find . | grep -E "(__pycache__|\.pyc$)" | xargs rm -rf
-RUN pip install -U -r __job-python__/requirements.txt
-RUN pip install __job-python__/.
+RUN pip install -U -r job-python-skeleton/requirements.txt
+RUN pip install job-python-skeleton/.

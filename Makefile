@@ -1,8 +1,8 @@
 REMOTE_REPO=liabifano
-DOCKER_NAME=__job-python__
+DOCKER_NAME=job-python-skeleton
 DOCKER_LABEL=latest
 GIT_MASTER_HEAD_SHA:=$(shell git rev-parse --short=7 --verify HEAD)
-PROJECT_NAME=__job-python__
+PROJECT_NAME=job-python-skeleton
 TEST_PATH=./
 
 
