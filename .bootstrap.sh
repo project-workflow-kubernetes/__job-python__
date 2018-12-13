@@ -79,8 +79,16 @@ function undo-rename-folders() {
 }
 
 
+function remove-secrets () {
+
+    sed -i.bak "/env:/d" .travis.yml && sed -i.bak "/global/d" .travis.yml && sed -i.bak "/- secure/d" .travis.yml
+    rm -- ".travis.yml.bak" || true
+
+}
+
 function generate-secrets () {
 
+    (remove-secrets)
     travis login --pro --auto
     travis encrypt --com DOCKER_USERNAME=$DOCKER_USERNAME --add
     travis encrypt --com DOCKER_PASSWORD=$DOCKER_PASSWORD --add
